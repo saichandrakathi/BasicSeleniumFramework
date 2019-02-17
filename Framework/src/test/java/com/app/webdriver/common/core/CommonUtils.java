@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import com.app.webdriver.common.core.exceptions.TestEnvInitFailedException;
+
 
 public class CommonUtils {
 	private CommonUtils() {

@@ -10,6 +10,8 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
+import com.app.webdriver.common.logging.Log;
+
 
 public class Assertion extends Assert{
 	private static Map<ITestResult, List> verificationFailuresMap = new HashMap<ITestResult, List>();

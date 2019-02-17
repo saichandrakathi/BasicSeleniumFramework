@@ -4,6 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import com.app.webdriver.common.core.APPWebDriver;
+import com.app.webdriver.common.core.configuration.Configuration;
+import com.app.webdriver.common.core.drivers.BrowserAbstract;
+
 
 public class ChromeBrowser extends BrowserAbstract {
 
@@ -72,13 +80,13 @@ public class ChromeBrowser extends BrowserAbstract {
 	  }
 
 	  @Override
-	  public WikiaWebDriver create() {
+	  public APPWebDriver create() {
 	    caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 	    if (Configuration.isUnsafePageLoad()) {
 	      caps.setCapability("pageLoadStrategy", "none");
 	    }
 
-	    return new WikiaWebDriver(new ChromeDriver(caps), server, useMobile);
+	    return new APPWebDriver(new ChromeDriver(caps), useMobile);
 	  }
 
 	  @Override

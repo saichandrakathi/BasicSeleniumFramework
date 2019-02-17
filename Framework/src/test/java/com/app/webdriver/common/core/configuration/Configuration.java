@@ -11,8 +11,13 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebDriverException;
+
 import com.app.webdriver.common.core.TestContext;
 import com.app.webdriver.common.core.annotations.InBrowser;
+import com.app.webdriver.common.core.exceptions.TestEnvInitFailedException;
 
 
 public class Configuration {

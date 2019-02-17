@@ -23,7 +23,6 @@ public abstract class BrowserAbstract {
 	   */
 	  public APPWebDriver getInstance() {
 	    setOptions();
-	    setProxy();
 	    setExtensions();
 	    setBrowserLogging(Level.SEVERE);
 	    APPWebDriver webdriver = create();
@@ -71,30 +70,7 @@ public abstract class BrowserAbstract {
 	  /**
 	   * Set Proxy instance for a Browser instance
 	   */
-	  protected void setProxy() {
-	    if (Configuration.useProxy()) {
-	      Proxy proxyServer = new Proxy();
-	      if ("true".equals(Configuration.useZap())) {
-	        String zapProxyAddress = String.format(
-	            "%s:%s",
-	            XMLReader.getValue("zap_proxy.address"),
-	            Integer.parseInt(XMLReader.getValue("zap_proxy.port"))
-	        );
-	        proxyServer.setHttpProxy(zapProxyAddress);
-	        proxyServer.setSslProxy(zapProxyAddress);
-	      } else {
-	        server = new NetworkTrafficInterceptor();
-	        server.setTrustAllServers(true);
-	        server.setConnectTimeout(90, TimeUnit.SECONDS);
-	        server.setTrustSource(TrustSource.defaultTrustSource());
-	        server.setMitmDisabled(!Boolean.parseBoolean(Configuration.useMITM()));
-	        server.setRequestTimeout(90, TimeUnit.SECONDS);
-	        server.enableHarCaptureTypes(CaptureType.REQUEST_HEADERS, CaptureType.RESPONSE_HEADERS);
-	        server.setUseEcc(true);
-	        proxyServer = server.startBrowserMobProxyServer();
-	      }
-	      caps.setCapability(CapabilityType.PROXY, proxyServer);
-	    }
-	  }
+	  
+	  
 	}
 
