@@ -2,6 +2,8 @@ package com.app.webdriver.common.core.interactions;
 
 import org.openqa.selenium.WebElement;
 
+import com.app.webdriver.common.logging.Log;
+
 public class Typing {
 
 	private Typing() {

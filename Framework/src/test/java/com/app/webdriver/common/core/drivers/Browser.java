@@ -1,6 +1,8 @@
 package com.app.webdriver.common.core.drivers;
 
 import com.app.webdriver.common.core.APPWebDriver;
+import com.app.webdriver.common.core.drivers.browsers.ChromeBrowser;
+import com.app.webdriver.common.logging.Log;
 
 public enum Browser {
 	CHROME(ChromeBrowser.class, "CHROME");

@@ -9,8 +9,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.app.webdriver.common.core.APPWebDriver;
+import com.app.webdriver.common.core.ExtHelper;
 import com.app.webdriver.common.core.configuration.Configuration;
 import com.app.webdriver.common.core.drivers.BrowserAbstract;
+import com.app.webdriver.common.logging.Log;
 
 
 public class ChromeBrowser extends BrowserAbstract {
@@ -32,7 +34,7 @@ public class ChromeBrowser extends BrowserAbstract {
 	  public void setOptions() {
 	    String chromeBinaryPath = "";
 	    String osName = System.getProperty("os.name").toUpperCase();
-	    Emulator emulator = Configuration.getEmulator();
+	   // Emulator emulator = Configuration.getEmulator();
 
 	    if (osName.contains("WINDOWS")) {
 	      chromeBinaryPath = CHROMEDRIVER_PATH_WINDOWS;
@@ -60,23 +62,6 @@ public class ChromeBrowser extends BrowserAbstract {
 	      chromeOptions.addArguments("disable-bundled-ppapi-flash");
 	    }
 
-	    if (useMobile) {
-	      chromeOptions.addArguments("--user-agent=" + UserAgentsRegistry.IPHONE.getUserAgent());
-	    }
-
-	    if (!emulator.equals(Emulator.DEFAULT)) {
-	      Map<String, Object> mobileEmulation = new HashMap<>();
-	      if (StringUtils.isNotBlank(emulator.getUserAgent())) {
-	        mobileEmulation.put("userAgent", emulator.getUserAgent());
-	      }
-	      if (StringUtils.isNotBlank(emulator.getDeviceName())) {
-	        mobileEmulation.put("deviceName", emulator.getDeviceName());
-	      } else {
-	        mobileEmulation.put("deviceMetrics", emulator.getDeviceMetrics());
-	      }
-
-	      chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
-	    }
 	  }
 
 	  @Override

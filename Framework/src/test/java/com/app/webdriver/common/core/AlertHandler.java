@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.app.webdriver.common.logging.Log;
+
 public class AlertHandler {
 
 	public static boolean isAlertPresent(WebDriver driver) {

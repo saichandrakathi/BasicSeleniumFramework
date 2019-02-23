@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.app.webdriver.common.core.CommonExpectedConditions;
 import com.app.webdriver.common.core.SelectorStack;
+import com.app.webdriver.common.logging.Log;
 
 
 public class Wait {

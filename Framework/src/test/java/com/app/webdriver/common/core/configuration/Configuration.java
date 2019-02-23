@@ -1,8 +1,11 @@
 package com.app.webdriver.common.core.configuration;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,10 +13,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriverException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.app.webdriver.common.core.TestContext;
 import com.app.webdriver.common.core.annotations.InBrowser;
@@ -22,8 +35,7 @@ import com.app.webdriver.common.core.exceptions.TestEnvInitFailedException;
 
 public class Configuration {
 	public static final String DEFAULT_LANGUAGE = "en";
-	  private static final String DEFAULT_CONFIG_FILE_NAME = "config_default.yml";
-	  private static final String LOCAL_CONFIG_FILE_NAME = "config.yml";
+	  private static final String CONFIG_FILE_NAME = "config.xml";
 	  private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
 	  private static final String SELENIUM_CONFIG_REPO_CONFIG_FILE_NAME = "config.xml";
 	  private static Map<String, String> defaultConfig;
@@ -33,38 +45,74 @@ public class Configuration {
 
 	  private static Map<String, String> readConfiguration() {
 	    if (defaultConfig == null) {
-	      Yaml yaml = new Yaml();
+	    	try {
+	            File inputFile = new File("config.xml");
+	            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	            Document doc = dBuilder.parse(inputFile);
+	            doc.getDocumentElement().normalize();
+	            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+	            NodeList nList = doc.getElementsByTagName("Variable");
+	            System.out.println("----------------------------");
+	            
+	            for (int temp = 0; temp < nList.getLength(); temp++) {
+	               Node nNode = nList.item(temp);
+	               System.out.println("\nCurrent Element :" + nNode.getNodeName());
+	               
+	               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	                  Element eElement = (Element) nNode;
+	                  defaultConfig.put(eElement.getElementsByTagName("Name").item(0).getTextContent(), eElement.getElementsByTagName("Value").item(0).getTextContent());
+	               }
+	            }
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }
 
-	      try {
-	        defaultConfig = (Map<String, String>) yaml.load(new FileInputStream(new File(
-	            DEFAULT_CONFIG_FILE_NAME)));
-	      } catch (FileNotFoundException e) {
-	        throw new TestEnvInitFailedException(String.format("CANNOT FIND DEFAULT CONFIG FILE : %s",
-	                                                           DEFAULT_CONFIG_FILE_NAME
-	        ), e);
-	      }
-
-	      File localConfigFile = new File(LOCAL_CONFIG_FILE_NAME);
-	      if (localConfigFile.exists()) {
-	        try {
-	          defaultConfig.putAll((Map<String, String>) yaml.load(new FileInputStream(localConfigFile)));
-	        } catch (FileNotFoundException e) {
-	          LOGGER.log(Level.INFO, "local config file not found", e);
-	        }
-	      } else {
-	        LOGGER.log(Level.INFO, "local config file does not exist");
-	      }
 	    }
-
-	    return defaultConfig;
+		return defaultConfig;
 	  }
+	  
 
 	  public static String getPropertyFromFile(String propertyName) {
-	    return "null".equals(String.valueOf(readConfiguration().get(propertyName))) ? null
-	                                                                                : String.valueOf(
-	                                                                                    readConfiguration()
-	                                                                                        .get(
-	                                                                                            propertyName));
+		 
+		  StringBuilder sb = null ;
+		  try {
+		  BufferedReader br = new BufferedReader(new FileReader(new File("/Users/skathi/git/Framework/Framework/src/test/resources/config.xml")));
+		  String line;
+		  sb = new StringBuilder();
+
+		  
+			while((line=br.readLine())!= null){
+			      sb.append(line.trim());
+			  }
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+		  catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  System.out.println(sb);
+		  //clear all comments
+		  Pattern pattern = Pattern.compile("<!--.+?(?=-->)-->",Pattern.DOTALL);
+		    Matcher matcher = pattern.matcher(sb);
+		    while (matcher.find()) {
+		        sb.replace(matcher.start(), matcher.end(), "");
+		        matcher = pattern.matcher(sb);
+		    }
+
+		    System.out.println(sb);
+	      Pattern p = Pattern.compile("<Name>"+propertyName+"</Name><Value>([^<]*)</Value>",Pattern.DOTALL);
+	      Matcher m = p.matcher(sb);
+		  if (m.find())
+		  {
+			  return m.group(1).trim();
+			  
+		  }
+		return null;
+		  	
 	  }
 
 	  private static String getProp(String propertyName) {
@@ -157,24 +205,7 @@ public class Configuration {
 	    return "true".equalsIgnoreCase(getProp("forceFandomDomain"));
 	  }
 
-	  public static Emulator getEmulator() {
-	    Emulator emulatorToUse = Emulator.DEFAULT;
-	    if (TestContext.getCurrentTestMethod() != null && TestContext.getCurrentTestMethod()
-	        .getDeclaringClass()
-	        .isAnnotationPresent(InBrowser.class)) {
-	      emulatorToUse = TestContext.getCurrentTestMethod()
-	          .getDeclaringClass()
-	          .getDeclaredAnnotation(InBrowser.class)
-	          .emulator();
-	    }
-	    if (TestContext.getCurrentTestMethod() != null && TestContext.getCurrentTestMethod()
-	        .isAnnotationPresent(InBrowser.class)) {
-	      emulatorToUse = TestContext.getCurrentTestMethod()
-	          .getDeclaredAnnotation(InBrowser.class)
-	          .emulator();
-	    }
-	    return emulatorToUse;
-	  }
+	  
 
 	  public static String useMITM() {
 	    if (getForceHttps()) {
@@ -192,26 +223,7 @@ public class Configuration {
 	    return getProp("unstablePageLoadStrategy");
 	  }
 
-	  public static Credentials getCredentials() {
-	    return new Credentials();
-	  }
-
-	  public static EnvType getEnvType() {
-	    return getEnvType(getEnv());
-	  }
-
-	  public static EnvType getEnvType(String env) {
-	    String[] sandboxEnvs = new String[]{"verify", "preview", "sandbox", "stable", "adeng"};
-
-	    if (env.contains("prod")) {
-	      return EnvType.PROD;
-	    } else if (StringUtils.indexOfAny(env, sandboxEnvs) != -1) {
-	      return EnvType.SANDBOX;
-	    } else if (env.contains("dev")) {
-	      return EnvType.DEV;
-	    }
-	    return EnvType.PROD;
-	  }
+	 
 
 	  public static void setTestValue(String key, String value) {
 	    testConfig.put(key, value);
@@ -268,33 +280,5 @@ public class Configuration {
 	    return getProp("disableCommunityPageSalesPitchDialog");
 	  }
 
-	  public static HttpHost getBorderProxy() {
-
-	    EnvType envType = getEnvType(getEnv());
-	    File configFile = new File(getCredentialsFilePath());
-
-	    if (envType.equals(EnvType.DEV)) {
-	      return new HttpHost(
-	          XMLReader.getValue(configFile, "border.poz.address"),
-	          Integer.parseInt(XMLReader.getValue(configFile, "border.poz.port")),
-	          XMLReader.getValue(configFile, "border.poz.protocol")
-	      );
-	    } else {
-	      return new HttpHost(
-	          XMLReader.getValue(configFile, "border.sjc.address"),
-	          Integer.parseInt(XMLReader.getValue(configFile, "border.sjc.port")),
-	          XMLReader.getValue(configFile, "border.sjc.protocol")
-	      );
-	    }
-	  }
-
-	  //TODO: Get rid of replacing wikia with fandom
-	  public static String getServicesUrl() {
-	    final String environment = Configuration.getEnvType().getKey();
-	    File configurationFile = new File(Configuration.getCredentialsFilePath());
-	    final String url = XMLReader.getValue(configurationFile, "services." + environment).replace(UrlBuilder.HTTPS_PREFIX, UrlBuilder.HTTP_PREFIX);
-	    final String properUrl = Configuration.getForceFandomDomain() ? url.replace("wikia", "fandom") : url;
-	    Objects.requireNonNull(url, "Please check if your configuration file contains url for service ");
-	    return properUrl;
-	  }
+	 
 	}
