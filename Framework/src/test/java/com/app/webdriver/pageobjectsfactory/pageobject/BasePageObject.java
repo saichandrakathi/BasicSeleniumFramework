@@ -416,7 +416,7 @@ public class BasePageObject {
 			restoreDefaultImplicitWait();
 		}
 	}
-
+	
 	public void waitForValueToBePresentInElementsAttributeByCss(
 			String selector, String attribute, String value
 			) {
@@ -466,8 +466,9 @@ public class BasePageObject {
 
 
 	public void fillInput(WebElement input, String value) {
-		wait.forElementVisible(input).sendKeys(value);
+		wait.forElementClickable(input).sendKeys(value);
 		Log.info("Entered value:"+value+" into field:"+input);
+		
 		
 	}
 

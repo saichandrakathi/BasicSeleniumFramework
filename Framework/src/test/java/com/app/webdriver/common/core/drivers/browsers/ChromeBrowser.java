@@ -52,7 +52,7 @@ public class ChromeBrowser extends BrowserAbstract {
 	    System.setProperty("webdriver.chrome.driver", chromedriver.getPath());
 	    Log.info("Using chromedriver: ", chromedriver.getPath());
 
-	    chromeOptions.addArguments("start-maximized");
+	    chromeOptions.addArguments("--start-maximized");
 	    chromeOptions.addArguments("disable-notifications");
 	    chromeOptions.addArguments("process-per-site");
 	    chromeOptions.addArguments("dns-prefetch-disable");
@@ -64,8 +64,7 @@ public class ChromeBrowser extends BrowserAbstract {
 	  public APPWebDriver create() {
 	    caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 	    
-
-	    return new APPWebDriver(new ChromeDriver(caps), useMobile);
+	    return new APPWebDriver(new ChromeDriver(chromeOptions));
 	  }
 
 	  @Override

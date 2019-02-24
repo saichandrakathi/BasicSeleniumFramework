@@ -67,6 +67,7 @@ public class Log {
 
 	    try {
 	      new Shooter().savePageScreenshot(Log.SCREEN_PATH + Log.imageCounter, driver);
+	     // CommonUtils.appendTextToFile(Log.SCREEN_PATH + Log.imageCounter+".html", driver.getPageSource());
 	      VelocityWrapper.fillErrorLogRow(Arrays.asList(LogLevel.ERROR), description, Log.imageCounter);
 	    } catch (Exception e) {
 	      VelocityWrapper.fillErrorLogRowWoScreenshotAndSource(Arrays.asList(LogLevel.ERROR),

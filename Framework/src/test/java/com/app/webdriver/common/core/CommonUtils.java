@@ -18,7 +18,7 @@ public class CommonUtils {
 
 	  public static void appendTextToFile(String filePath, String textToWrite) {
 	    try {
-	      FileWriter newFile = new FileWriter(filePath, true);
+	      FileWriter newFile = new FileWriter(filePath, true); 
 	      BufferedWriter out = new BufferedWriter(newFile);
 	      out.write(textToWrite);
 	      out.newLine();

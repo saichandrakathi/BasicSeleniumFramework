@@ -8,19 +8,17 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 public class APPWebDriver extends EventFiringWebDriver {
 
 	  private WebDriver webDriver;
-	  private boolean isMobile;
 
-	  public APPWebDriver(WebDriver webdriver, boolean isMobile) {
+	  public APPWebDriver(WebDriver webdriver) {
 	    super(webdriver);
 
 	    this.webDriver = webdriver;
-	    this.isMobile = isMobile;
 	  }
 
 	  
 
 	  public boolean isChrome() {
-	    return webDriver instanceof ChromeDriver && !isMobile;
+	    return webDriver instanceof ChromeDriver;
 	  }
 
 	
