@@ -11,6 +11,7 @@ public class Test1 extends TestTemplate{
 	public void login() {
 	//	LoginPage login = new LoginPage(driver);
 	//	
+		//
 	}
 
 }
