@@ -17,6 +17,14 @@
     <Value>http://slc11mei.dev.oraclecorp.com:10613/apm</Value>
   </Variable>
 <Variable>
+  <Name>browser</Name>
+  <Value>CHROME</Value>
+</Variable>
+<Variable>
+  <Name>browserSize</Name>
+  <Value>maximised</Value>
+</Variable>
+<Variable>
   <Name>Unified_HomePage</Name> 
   <!--<Value>https://fuscdrmsmc262-fa-ext.us.oracle.com/fscmUI/faces/FuseWelcome</Value>-->
   <!--<Value>https://fuscdrmsmc222-login.us.oracle.com/</Value> -->

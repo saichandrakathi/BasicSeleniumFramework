@@ -7,9 +7,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.app.webdriver.common.driverprovider.DriverProvider;
+import com.app.webdriver.common.logging.Log;
 
 
 
@@ -71,31 +73,6 @@ public class JavascriptActions {
 	    js.executeScript("$(arguments[0]).mouseenter()", element);
 	  }
 
-	  public boolean isElementInViewPort(WebElement element) {
-
-	    int offset = getOffset();
-
-	    try {
-	      return (Boolean) js.executeScript("return ($(window).scrollTop() + " + offset + " < $(arguments[0]).offset().top) && ($(window).scrollTop() "
-	                                        + "+ $(window).height() > $(arguments[0]).offset().top + $(arguments[0]).height() + "
-	                                        + offset + ")",
-	                                        element
-	      );
-	    } catch (WebDriverException e) {
-	      String windowScrollTop =
-	          "((window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement "
-	          + "|| document.body.parentNode || document.body).scrollTop)";
-	      String elementOffsetTop = "(arguments[0]).offsetTop";
-	      String windowHeight = "(window.innerHeight)";
-	      String elementOuterHeight = "(arguments[0]).clientHeight";
-
-	      return (boolean) js.executeScript("return (" + windowScrollTop + " + " + offset + " < " + elementOffsetTop + " && "
-	                                        + windowScrollTop + " + " + windowHeight + " > " + elementOffsetTop + " + "
-	                                        + elementOuterHeight + " + " + offset + ")",
-	                                        element
-	      );
-	    }
-	  }
 
 	  public void scrollToBottom() {
 	    js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -112,18 +89,11 @@ public class JavascriptActions {
 	  public void scrollToElement(WebElement element) {
 	    try {
 	      js.executeScript(
-	          "window.scroll(0,parseInt($(arguments[0]).offset().top - " + getOffset() + "));",
+	          "arguments[0].scrollIntoView();",
 	          element
 	      );
 	    } catch (WebDriverException e) {
-	      if (e.getMessage().contains(XSSContent.NO_JQUERY_ERROR)) {
-	        Log.log("JSError", "JQuery is not defined", false);
-	      }
-	      js.executeScript(
-	          "window.scroll(0,parseInt(arguments[0].getBoundingClientRect().top + window.pageYOffset - "
-	          + "arguments[0].clientTop - " + getOffset() + "));",
-	          element
-	      );
+	    	Log.log("JSError", e.getMessage(), false);
 	    }
 	  }
 
@@ -135,34 +105,13 @@ public class JavascriptActions {
 	    js.executeScript("arguments[0].scrollIntoView();", element);
 	  }
 
-	  /**
-	   * Gets the distance from top to the bottom of the navigation bar, no matter if it's mobile or
-	   * desktop.
-	   *
-	   * @return offset
-	   */
-	  private int getOffset() {
-	    WikiBasePageObject wikiPage = new WikiBasePageObject();
-	    int offset = wikiPage.getNavigationBarOffsetFromTop();
-	    if (wikiPage.isBannerNotificationContainerPresent()) {
-	      offset += wikiPage.getBannerNotificationsHeight();
-	    }
-
-	    Search searchComponent = new SearchResultsPage().getSearch();
-	    if (searchComponent.isPresent()) {
-	      offset += searchComponent.getHeight();
-	    }
-
-	    return offset;
-	  }
 
 	  public void scrollToSpecificElement(WebElement element) {
 	    try {
 	      js.executeScript("arguments[0].scrollIntoView(true);", element);
 	    } catch (WebDriverException e) {
-	      if (e.getMessage().contains(XSSContent.NO_JQUERY_ERROR)) {
-	        Log.log("JSError", "JQuery is not defined", false);
-	      }
+	    	Log.log("JSError", e.getMessage(), false);
+	     
 	    }
 	  }
 
@@ -183,15 +132,6 @@ public class JavascriptActions {
 	    js.executeScript("$(arguments[0]).scrollTop(arguments[1])", modal, scrollTop);
 	  }
 
-	  public void scrollElementIntoViewPort(WebElement element) {
-	    try {
-	      if (!isElementInViewPort(element)) {
-	        scrollToElement(element);
-	      }
-	    } catch (WebDriverException e) {
-	      Log.info("There might be a problem with scrolling to element", e);
-	    }
-	  }
 
 	  public void scrollBy(int x, int y) {
 	    js.executeScript("window.scrollBy(arguments[0], arguments[1])", x, y);

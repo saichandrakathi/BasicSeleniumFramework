@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -37,7 +38,7 @@ public class Configuration {
 	public static final String DEFAULT_LANGUAGE = "en";
 	  private static final String CONFIG_FILE_NAME = "config.xml";
 	  private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
-	  private static final String SELENIUM_CONFIG_REPO_CONFIG_FILE_NAME = "config.xml";
+	  private static final String SELENIUM_CONFIG_REPO_CONFIG_FILE_NAME = "seleniumconfig.xml";
 	  private static Map<String, String> defaultConfig;
 	  private static Map<String, String> testConfig = new HashMap<String, String>();
 
@@ -46,15 +47,13 @@ public class Configuration {
 	  private static Map<String, String> readConfiguration() {
 	    if (defaultConfig == null) {
 	    	try {
-	            File inputFile = new File("config.xml");
+	            File inputFile = new File("src/test/resources/"+CONFIG_FILE_NAME);
 	            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	            Document doc = dBuilder.parse(inputFile);
 	            doc.getDocumentElement().normalize();
 	            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-	            NodeList nList = doc.getElementsByTagName("Variable");
-	            System.out.println("----------------------------");
-	            
+	            NodeList nList = doc.getElementsByTagName("Variable");	            
 	            for (int temp = 0; temp < nList.getLength(); temp++) {
 	               Node nNode = nList.item(temp);
 	               System.out.println("\nCurrent Element :" + nNode.getNodeName());
@@ -86,12 +85,10 @@ public class Configuration {
 			      sb.append(line.trim());
 			  }
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		  
 		  catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		  System.out.println(sb);
@@ -128,102 +125,14 @@ public class Configuration {
 	    return getProp("browser");
 	  }
 
-	  public static String getDpr() {
-	    return getProp("dpr");
-	  }
-
-	  public static String getDefaultWikiName() {
-	    return getPropertyFromFile("wikiName");
-	  }
-
-	  public static String getEnv() {
-	    return getProp("env");
-	  }
-
-	  public static String getWikiName() {
-	    return getProp("wikiName");
-	  }
-
-	  public static String getWikiLanguage() {
-	    return getProp("language");
-	  }
-
-	  public static String getPlatform() {
-	    return getProp("platform");
-	  }
-
-	  public static String getMobileWikiVersion() { return getProp("mobileWikiVersion"); }
-
-	  public static String getCredentialsFilePath() {
-	    return Paths.get(getProp("seleniumConfigPath"), SELENIUM_CONFIG_REPO_CONFIG_FILE_NAME)
-	        .toString();
-	  }
-
-	  public static String getQS() {
-	    return getProp("qs");
-	  }
-
-	  public static String getAppiumIp() {
-	    return getProp("appiumIp");
-	  }
-
-	  public static String getDeviceName() {
-	    return getProp("deviceName");
-	  }
-
-	  public static String getDisableFlash() {
-	    return getProp("disableFlash");
-	  }
-
-	  public static String getJSErrorsEnabled() {
-	    return getProp("jsErrorsEnabled");
-	  }
-
+	 
 	  public static String getLogEnabled() {
 	    return getProp("logEnabled");
 	  }
 
-	  public static Boolean getAdsData() { return "true".equals(getProp("adsData")); }
-
-	  public static String getMockAds() {
-	    return getProp("mockAds");
-	  }
-
-	  public static Boolean getForceHttps() {
-	    return "true".equalsIgnoreCase(getProp("forceHttps"));
-	  }
-
-	  public static Boolean isUnsafePageLoad() {
-	    return "true".equalsIgnoreCase(getProp("unsafePageLoad"));
-	  }
-
-	  public static Boolean getForceLanguageInPath() {
-	    return "true".equalsIgnoreCase(getProp("forceLanguageInPath"));
-	  }
-
-	  public static Boolean getForceFandomDomain() {
-	    return "true".equalsIgnoreCase(getProp("forceFandomDomain"));
-	  }
-
-	  
-
-	  public static String useMITM() {
-	    if (getForceHttps()) {
-	      return "true";
-	    }
-
-	    return getProp("useMITM");
-	  }
-
-	  public static String useZap() {
-	    return getProp("useZapProxy");
-	  }
-
-	  public static String getPageLoadStrategy() {
-	    return getProp("unstablePageLoadStrategy");
-	  }
-
-	 
+	  public static String getUrl() {
+		    return getProp("Unified_HomePage");
+		  }
 
 	  public static void setTestValue(String key, String value) {
 	    testConfig.put(key, value);
@@ -276,9 +185,24 @@ public class Configuration {
 	    return res.toArray(new String[res.size()]);
 	  }
 
-	  public static String getDisableCommunityPageSalesPitchDialog() {
-	    return getProp("disableCommunityPageSalesPitchDialog");
-	  }
+
+
+	public static List getWikiLanguage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String getEnv() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String getJSErrorsEnabled() {
+    return getProp("jsErrorsEnabled");
+  }
+
+
+	
 
 	 
 	}

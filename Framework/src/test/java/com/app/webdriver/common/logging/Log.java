@@ -14,8 +14,24 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import com.app.webdriver.common.core.APPWebDriver;
 import com.app.webdriver.common.core.CommonUtils;
+import com.app.webdriver.common.core.configuration.Configuration;
+import com.app.webdriver.common.core.imageutilities.Shooter;
+import com.app.webdriver.common.driverprovider.DriverProvider;
+import com.google.common.base.Throwables;
+
+import static org.testng.internal.Utils.escapeHtml;
 
 
 
@@ -27,14 +43,21 @@ public class Log {
 	  private static final String SCREEN_PATH = SCREEN_DIR_PATH + "screenshot";
 	  private static final String LOG_FILE_NAME = "log.html";
 	  public static final String LOG_PATH = REPORT_PATH + LOG_FILE_NAME;
-	  private static final ArrayList<Boolean> LOGS_RESULTS = new ArrayList<>();
+	  private static final ArrayList<Boolean> LOGS_RESULTS = new ArrayList<Boolean>();
 	  public static String mobileWikiVersion = "";
 	  private static long imageCounter;
 
-	  @Getter
 	  private static boolean testStarted = false;
 
-	  public static void clearLogStack() {
+	  public static boolean isTestStarted() {
+		return testStarted;
+	}
+
+	public static void setTestStarted(boolean testStarted) {
+		Log.testStarted = testStarted;
+	}
+
+	public static void clearLogStack() {
 	    LOGS_RESULTS.clear();
 	  }
 
@@ -59,7 +82,7 @@ public class Log {
 
 	    new Shooter().savePageScreenshot(SCREEN_PATH + imageCounter, driver);
 
-	    LogData logType = success ? LogLevel.OK : LogLevel.ERROR;
+	    LogLevel logType = success ? LogLevel.OK : LogLevel.ERROR;
 	    VelocityWrapper.fillLogRowWithScreenshot(Arrays.asList(logType),
 	                                             command,
 	                                             description,
@@ -111,7 +134,7 @@ public class Log {
 	    LOGS_RESULTS.add(isSuccess);
 	    String escapedDescription = escapeHtml(description);
 
-	    List<LogData> logTypeList = new ArrayList<>();
+	    List<LogData> logTypeList = new ArrayList<LogData>();
 	    logTypeList.add(isSuccess ? LogLevel.OK : LogLevel.ERROR);
 
 	    if (ifLowLevel) {
@@ -201,25 +224,16 @@ public class Log {
 	    String className = testMethod.getDeclaringClass().getCanonicalName();
 	    String command;
 	    String description;
-	    if (testMethod.isAnnotationPresent(RelatedIssue.class)) {
-	      String issueID = testMethod.getAnnotation(RelatedIssue.class).issueID();
-	      String jiraPath = "https://wikia-inc.atlassian.net/browse/";
-	      String jiraUrl = jiraPath + issueID;
-	      String jiraLink = VelocityWrapper.fillLink(jiraUrl, issueID);
-	      command = "Known failure";
-	      description = testName + " - " + jiraLink + " " + testMethod.getAnnotation(RelatedIssue.class)
-	          .comment();
-	    } else {
-	      command = "";
-	      description = testName;
-	    }
+	    
+	    command = "";
+	    description = testName;
 	    String html = VelocityWrapper.fillFirstLogRow(className, testName, command, description);
 	    CommonUtils.appendTextToFile(LOG_PATH, html);
 	    testStarted = true;
 	  }
 
 	  public static void logAssertionStacktrace(AssertionError exception) {
-	    WikiaWebDriver driver = DriverProvider.getActiveDriver();
+	    APPWebDriver driver = DriverProvider.getActiveDriver();
 
 	    Log.imageCounter += 1;
 	    if ("true".equals(Configuration.getLogEnabled())) {
@@ -245,8 +259,9 @@ public class Log {
 	  }
 
 	  public static void stacktrace(Throwable throwable) {
-	    String exceptionMessage = Throwables.getStackTrace(throwable);
-	    List<LogData> classList = new ArrayList<>();
+	    String exceptionMessage = Throwables.getStackTraceAsString(throwable);
+	    List<LogData> classList = new ArrayList<LogData>();
+	    
 	    classList.add(LogLevel.ERROR);
 	    classList.add(LogType.STACKTRACE);
 
@@ -257,62 +272,7 @@ public class Log {
 	  }
 
 	  public static void stop() {
-	    WikiaWebDriver driver = DriverProvider.getActiveDriver();
-
-	    if (driver.getProxy() != null && Configuration.getForceHttps()) {
-	      Har har = driver.getProxy().getHar();
-	      for (HarEntry entry : har.getLog().getEntries()) {
-	        URL url;
-	        try {
-	          url = new URL(entry.getRequest().getUrl());
-	          if (url.getHost().contains("wikia")) {
-	            boolean isHttps = entry.getRequest().getUrl().startsWith("https");
-	            Log.log("VISITED URL",
-	                    "Url: " + entry.getRequest().getUrl(),
-	                    !Configuration.getForceHttps() || isHttps
-	            );
-	          }
-	        } catch (MalformedURLException e) {
-	          Log.log("MALFORMED URL", "Url: " + entry.getRequest().getUrl(), false);
-	        }
-	      }
-	    }
-
-	    if (driver.getProxy() != null && Configuration.getAdsData()) {
-	      Har har = driver.getProxy().getHar();
-	      for (HarEntry entry : har.getLog().getEntries()) {
-	        try {
-	          if (entry.getRequest().getUrl().contains("adeng")) {
-	            String[] urlValue = entry.getRequest().getUrl().split("(adeng).+\\?");
-	            String[] values = urlValue[1].split("&");
-
-	            Log.info("Ad parameters", "Header: " + Arrays.toString(values));
-	          }
-	        } catch (NullPointerException ex) {
-	          Log.info("Did not get successful response", ex);
-	        }
-	      }
-	      Pattern pt = Pattern.compile("\\d{2,}");
-
-	      WebElement mercuryScriptVersion = null;
-	      if (Configuration.getEmulator().isMobile()) {
-	        mercuryScriptVersion = driver.findElement(By.cssSelector("script[src*='mercury_ads_js']"));
-	      }
-
-	      String mercuryAdsJsValue = mercuryScriptVersion.getAttribute("src");
-
-	      Matcher matcher = pt.matcher(mercuryAdsJsValue);
-	      if (matcher.find()) {
-	        mercuryAdsJsValue = matcher.group(0);
-	      } else {
-	        throw new WebDriverException("Missing mobile param in query string");
-	      }
-	      Log.info("Mercury Ads Version: " + mercuryAdsJsValue);
-	    }
-
-	    if (Configuration.getMobileWikiVersion() != null) {
-	      Log.info("Mobile Wiki Version: " + Configuration.getMobileWikiVersion());
-	    }
+	    APPWebDriver driver = DriverProvider.getActiveDriver();
 
 	    String html = VelocityWrapper.fillLastLogRow();
 	    CommonUtils.appendTextToFile(Log.LOG_PATH, html);
@@ -322,14 +282,13 @@ public class Log {
 	  public static void startReport() {
 	    CommonUtils.createDirectory(Log.SCREEN_DIR_PATH);
 	    imageCounter = 0;
-
 	    String date = DateTimeFormat.forPattern(Log.DATE_FORMAT).print(DateTime.now(DateTimeZone.UTC));
 	    String polishDate = DateTimeFormat.forPattern(Log.POLISH_DATE_FORMAT)
 	        .print(DateTime.now()
 	                   .withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone("Europe/Warsaw"))));
 	    String browser = Configuration.getBrowser();
 	    String os = System.getProperty("os.name");
-	    String testingEnvironmentUrl = UrlBuilder.createUrlBuilder().getUrl();
+	    String testingEnvironmentUrl = Configuration.getUrl();
 	    String testingEnvironment = Configuration.getEnv();
 	    String testedVersion = "TO DO: GET WIKI VERSION HERE";
 

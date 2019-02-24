@@ -20,6 +20,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.app.webdriver.common.core.element.JavascriptActions;
+import com.app.webdriver.common.core.imageutilities.Shooter;
 
 
 public class CommonExpectedConditions {
@@ -468,30 +469,6 @@ public class CommonExpectedConditions {
 	    };
 	  }
 
-	  /**
-	   * @param accuracy in percentage between 0 and 100.
-	   */
-	  public static ExpectedCondition<Boolean> elementToHaveColor(
-	      final WebElement element, final Color color, final int accuracy
-	  ) {
-	    final Shooter shooter = new Shooter();
-	    final ImageComparison imageComparison = new ImageComparison();
-	    return new ExpectedCondition<Boolean>() {
-	      @Override
-	      public Boolean apply(WebDriver driver) {
-	        BufferedImage image = shooter.takeScreenshot(element, driver);
-	        return imageComparison.isColorImage(image, color, accuracy);
-	      }
-
-	      @Override
-	      public String toString() {
-	        return String.format("At least %s percents of element does not have %s color",
-	                             (100 - accuracy),
-	                             color.toString()
-	        );
-	      }
-	    };
-	  }
 
 	  public static ExpectedCondition<Boolean> cssValuePresentForElement(
 	      final By bySelector, final String cssProperty, final String expectedValue

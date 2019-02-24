@@ -1,0 +1,172 @@
+<html>
+    <style>
+    table {
+        margin:0 auto;
+        width:100%;
+        min-width:1300px;
+        max-width:1600px;
+    }
+    td {border-top: 1px solid grey;}
+    td:first-child {width:120px;}
+    td:nth-child(2) {word-break: break-all;}
+    pre {white-space: pre-wrap;}
+    td:nth-child(3){width:100px;}
+    tr.success{color:black;background-color:#CCFFCC;}
+    tr.warning{color:black;background-color:#FEE01E;}
+    tr.error{color:black;background-color:#FFCCCC;}
+    tr.info{color:white;background-color:#78a1c0}
+    tr.step{color:white;background:grey}
+    </style>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+        <script>
+            $(function() {
+                $('.info').hide();
+                $('.stacktrace').hide();
+                $("table").click(function(event) {
+                    event.stopPropagation();
+                    var $target = $(event.target);
+                    if ($target.closest("tr").attr("class") == "error stacktrace" ) {
+                        $target.closest("tr").slideUp();
+                    } else if ($target.closest("tr").next("tr").attr("class") == "error stacktrace") {
+                        $target.closest("tr").next("tr").slideToggle();
+                    }
+                });
+            });
+        </script>
+        <p>Date: 2019-02-24T07:11:47+00:00 </p>
+        <p>Polish Time: 24/02/2019 08:11:47 +01:00 </p>
+        <p>Browser: CHROME</p>
+        <p>OS: Mac OS X </p>
+        <p>Testing environment: https://fuscdrmsmc167-fa-ext.us.oracle.com/homePage/faces/FuseWelcome </p>
+        <p>Testing environment: $testingEnvironment </p>
+        <p>Tested version: TO DO: GET WIKI VERSION HERE</p>
+        <div id='toc'></div>
+
+<button id="hideLowLevel">hide low level actions</button>
+<button id="showLowLevel">show low level actions</button>
+
+<script>
+function createToc()
+{
+	var h1 = $('td h1');
+	var l = h1.length;
+	var toc = "<ul>";
+	for (var i=0; i<l; i++){
+		var ident = "toc"+i;
+		var tr = h1[i].parentNode.parentNode;
+		h1[i].setAttribute('id', ident);
+		if (tr.style.backgroundColor == "red")
+		{
+			var temp = "<li><a style=\"color:red;\" href='#" + ident + "' >" + h1[i].textContent + "</a></li>";
+		}
+		else
+		{
+			var temp = "<li><a href='#" + ident + "' >" + h1[i].textContent + "</a></li>";
+		}
+		toc += temp;
+	}
+	toc+="</ul>";
+	var tocWrapper = document.getElementById('toc');
+	console.log(toc);
+	tocWrapper.innerHTML += toc;
+}
+function markMethodAsFailed() {
+	var a = $('table tr.error').parent();
+	var l = a.length;
+	for (var i=0; i<l; i++)
+	{
+		var b = a[i].children[0];
+		b.style.backgroundColor = "red";
+	}
+}
+function addLinkBackToTheJob() {
+	if (location.pathname.indexOf('/job/') > -1) {
+		var jobPath = location.pathname.replace(/(\/job\/[^/]*)\/.*$/, '$1'),
+			$a = $('<a></a>').attr('href', jobPath).text('Back to job'),
+			$a = $a.wrap('<p></p>');
+			$p = $('p').first();
+		$p.before($a);
+	}
+}
+
+$(document).ready(function () {
+	markMethodAsFailed();
+	createToc();
+	addLinkBackToTheJob();
+});
+
+(function (ctx) {
+    var hideButton, showButton, document;
+    document = ctx.document;
+    hideButton = document.getElementById('hideLowLevel');
+    showButton = document.getElementById('showLowLevel');
+
+    function manageActions(direction) {
+        // get all elements with class lowLevelAction
+        var elements = document.getElementsByClassName("info");
+        for (var i = 0; i < elements.length; i++) {
+            if (direction === 'hide') {
+                //hide lowLevelActions
+                elements[i].style.display = "none";
+            } else if (direction === 'show') {
+                //show lowLevelActions
+                elements[i].style.display = "";
+            }
+        }
+    }
+    hideButton.addEventListener('click', function () {
+        manageActions('hide');
+    }, false);
+    showButton.addEventListener('click', function () {
+        manageActions('show');
+    }, false);
+}(this));
+</script>
+<table><h1>Class: <em>com.app.webdriver.testcases.cmp.Test1.login</em></h1>
+    <tr class="step">
+        <td></td>
+        <td><h1><em>login</em></h1></td>
+        <td> <br/> &nbsp;</td>
+    </tr>
+
+<tr class="info">
+    <td>Using chromedriver: </td>
+    <td>/Users/skathi/git/Framework/Framework/target/test-classes/ChromeDriver/chromedriver_mac64/chromedriver</td>
+    <td> <br/> &nbsp;</td>
+</tr>
+
+<tr class="success">
+    <td>Navigate to</td>
+    <td><a href="https://fuscdrmsmc167-fa-ext.us.oracle.com/homePage/faces/FuseWelcome">https://fuscdrmsmc167-fa-ext.us.oracle.com/homePage/faces/FuseWelcome</a>
+</td>
+    <td> <br/> &nbsp;</td>
+</tr>
+
+<tr class="info">
+    <td>INFO</td>
+    <td>NO ALERT PRESENT</td>
+    <td> <br/> &nbsp;</td>
+</tr>
+
+<tr class="warning">
+    <td>Url after navigation</td>
+    <td>https://fuscdrmsmc167-login.us.oracle.com/oam/server/obrareq.cgi?encquery%3DJNHdKiQrtrYf%2Bok9f2EF5sh3Oty6TKhOdot8CKgTZZJ5Ow6Z47gsvEKHANBl2jbfO4NDGdGsO1DX3aDauuCHPUvP69gLFrSQPMqdWAQmvDKgAsHMvj5YC0alpPfn6gXZS8S1R7pY2IC%2F35frlWvi5zoHfP3%2BM8orKN9RvyUhxSWctPBl2vtwMq4p1f2xslr81IaCwhNqOzcEtopX1JoOm6VH%2FzUVGdaVMp0KYIDeEQ8CfTQAj%2Fl1NXnjuMRzHOWW2fk58kmB7iLwfWNLFAzyUvKWEPQfMnJHn%2FZCPb24mRlO4L%2FrbaS3tLT%2FLdYlz%2BnbV0Yj5BYuga4jawISUnbcEkYXlS2Rkm6o%2Fobllf6NXbb7VNaERmaXyipZV8HN8rpgVABYUOuRisv8Ym6dpiJ9TDvfVk%2Bk5u05UnL4rFiLofVmlcfZDGeU7%2F8wjpo%2BDrDfykhH7gWkOHBHV5Xo1p0TpVbp5lGOJ3yKS5pQIyRH%2BHp9%2BTgFZ%2B2F7%2FFhWvZbrmI0%20agentid%3DOraFusionApp_11AG%20ver%3D1%20crmethod%3D2%26cksum%3Dd048d09a0515993ed2a131b6f82cab51fce236f7&ECID-Context=1.005WduA8_tqD8hMLIMx0if0000ZY00042z%3BkXjE</td>
+    <td> <br/> &nbsp;</td>
+</tr>
+
+    <tr class="step">
+        <td>&nbsp</td>
+        <td>STOP LOGGING METHOD
+            <div style="text-align:center"><a href="#toc" style="color:blue">
+            <b>BACK TO MENU</b></a>
+            </div>
+        </td>
+        <td> <br/> &nbsp;</td>
+    </tr>
+</table>
+
+</body></html>

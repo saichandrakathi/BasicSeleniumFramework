@@ -58,18 +58,12 @@ public class ChromeBrowser extends BrowserAbstract {
 	    chromeOptions.addArguments("dns-prefetch-disable");
 	    chromeOptions.addArguments("allow-running-insecure-content");
 
-	    if ("true".equals(Configuration.getDisableFlash())) {
-	      chromeOptions.addArguments("disable-bundled-ppapi-flash");
-	    }
-
 	  }
 
 	  @Override
 	  public APPWebDriver create() {
 	    caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-	    if (Configuration.isUnsafePageLoad()) {
-	      caps.setCapability("pageLoadStrategy", "none");
-	    }
+	    
 
 	    return new APPWebDriver(new ChromeDriver(caps), useMobile);
 	  }
