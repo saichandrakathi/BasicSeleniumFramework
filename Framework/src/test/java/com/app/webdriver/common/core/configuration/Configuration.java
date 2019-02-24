@@ -47,16 +47,14 @@ public class Configuration {
 	  private static Map<String, String> readConfiguration() {
 	    if (defaultConfig == null) {
 	    	try {
-	            File inputFile = new File("src/test/resources/"+CONFIG_FILE_NAME);
+	            File inputFile = new File(System.getProperty("user.dir")+"/src/test/resources/"+CONFIG_FILE_NAME);
 	            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	            Document doc = dBuilder.parse(inputFile);
 	            doc.getDocumentElement().normalize();
-	            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 	            NodeList nList = doc.getElementsByTagName("Variable");	            
 	            for (int temp = 0; temp < nList.getLength(); temp++) {
 	               Node nNode = nList.item(temp);
-	               System.out.println("\nCurrent Element :" + nNode.getNodeName());
 	               
 	               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 	                  Element eElement = (Element) nNode;
@@ -76,7 +74,7 @@ public class Configuration {
 		 
 		  StringBuilder sb = null ;
 		  try {
-		  BufferedReader br = new BufferedReader(new FileReader(new File("/Users/skathi/git/Framework/Framework/src/test/resources/config.xml")));
+		  BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir")+"/src/test/resources/"+CONFIG_FILE_NAME)));
 		  String line;
 		  sb = new StringBuilder();
 

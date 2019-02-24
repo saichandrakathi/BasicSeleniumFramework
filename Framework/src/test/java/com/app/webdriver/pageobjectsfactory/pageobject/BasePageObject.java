@@ -70,7 +70,7 @@ public class BasePageObject {
 		long timeCurrent = time.getTime();
 		return String.valueOf(timeCurrent);
 	}
-
+	
 	private static String getEmailChangeConfirmationLink(String email, String password) {
 		String mailSubject = "Confirm your email address change on FANDOM";
 		String url = EmailUtils.getActivationLinkFromEmailContent(EmailUtils.getFirstEmailContent(email,
@@ -263,6 +263,7 @@ public class BasePageObject {
 		jsActions.scrollToElement(element);
 		wait.forElementClickable(element, 5);
 		element.click();
+		Log.info("Clicked on element "+element);
 	}
 
 	protected void scrollAndClick(List<WebElement> elements, int index) {
@@ -466,6 +467,8 @@ public class BasePageObject {
 
 	public void fillInput(WebElement input, String value) {
 		wait.forElementVisible(input).sendKeys(value);
+		Log.info("Entered value:"+value+" into field:"+input);
+		
 	}
 
 	/**

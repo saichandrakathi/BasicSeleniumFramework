@@ -14,13 +14,14 @@ public class LoginPage extends BasePageObject{
 	  private WebElement password;
 	  @FindBy(id = "btnActive")
 	  private WebElement btnLogin;
-	
+	  @FindBy(xpath = "//title[contains(text(),'Navigator')]")
+	  private WebElement btnnavigator;
 
 	  
 	  public void login(String UserName, String Password) {
 		    fillInput(userName, UserName);
 		    fillInput(password, Password);
-		    scrollAndClick(btnLogin); 
-
+		    waitAndClick(btnLogin); 
+		    waitAndClick(btnnavigator);
 		  }
 }

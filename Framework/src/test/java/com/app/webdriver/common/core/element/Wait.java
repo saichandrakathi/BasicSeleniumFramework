@@ -176,6 +176,7 @@ public class Wait {
 	    changeImplicitWait(0, TimeUnit.MILLISECONDS);
 	    try {
 	      element.getTagName();
+	      return wait.until(ExpectedConditions.visibilityOf(element));
 	    } catch (WebDriverException e) {
 	      Log.info(INIT_MESSAGE, INIT_ERROR_MESSAGE);
 	    }
