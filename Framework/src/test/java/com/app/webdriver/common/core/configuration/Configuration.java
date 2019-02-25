@@ -39,13 +39,11 @@ public class Configuration {
 	  private static final String CONFIG_FILE_NAME = "config.xml";
 	  private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
 	  private static final String SELENIUM_CONFIG_REPO_CONFIG_FILE_NAME = "seleniumconfig.xml";
-	  private static Map<String, String> defaultConfig;
 	  private static Map<String, String> testConfig = new HashMap<String, String>();
 
 	  public Configuration() {}
 
 	  private static Map<String, String> readConfiguration() {
-	    if (defaultConfig == null) {
 	    	try {
 	            File inputFile = new File(System.getProperty("user.dir")+"/src/test/resources/"+CONFIG_FILE_NAME);
 	            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -55,18 +53,15 @@ public class Configuration {
 	            NodeList nList = doc.getElementsByTagName("Variable");	            
 	            for (int temp = 0; temp < nList.getLength(); temp++) {
 	               Node nNode = nList.item(temp);
-	               
 	               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 	                  Element eElement = (Element) nNode;
-	                  defaultConfig.put(eElement.getElementsByTagName("Name").item(0).getTextContent(), eElement.getElementsByTagName("Value").item(0).getTextContent());
+	                  testConfig.put(eElement.getElementsByTagName("Name").item(0).getTextContent(), eElement.getElementsByTagName("Value").item(0).getTextContent());
 	               }
 	            }
 	         } catch (Exception e) {
 	            e.printStackTrace();
 	         }
-
-	    }
-		return defaultConfig;
+		return testConfig;
 	  }
 	  
 
@@ -77,8 +72,6 @@ public class Configuration {
 		  BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir")+"/src/test/resources/"+CONFIG_FILE_NAME)));
 		  String line;
 		  sb = new StringBuilder();
-
-		  
 			while((line=br.readLine())!= null){
 			      sb.append(line.trim());
 			  }
@@ -89,7 +82,6 @@ public class Configuration {
 		  catch (IOException e) {
 			e.printStackTrace();
 		}
-		  System.out.println(sb);
 		  //clear all comments
 		  Pattern pattern = Pattern.compile("<!--.+?(?=-->)-->",Pattern.DOTALL);
 		    Matcher matcher = pattern.matcher(sb);
@@ -98,7 +90,6 @@ public class Configuration {
 		        matcher = pattern.matcher(sb);
 		    }
 
-		    System.out.println(sb);
 	      Pattern p = Pattern.compile("<Name>"+propertyName+"</Name><Value>([^<]*)</Value>",Pattern.DOTALL);
 	      Matcher m = p.matcher(sb);
 		  if (m.find())
@@ -111,11 +102,11 @@ public class Configuration {
 	  }
 
 	  private static String getProp(String propertyName) {
-	    if (testConfig.get(propertyName) == null) {
+	    if (readConfiguration().get(propertyName) == null) {
 	      return System.getProperty(propertyName) != null ? System.getProperty(propertyName)
 	                                                      : getPropertyFromFile(propertyName);
 	    } else {
-	      return testConfig.get(propertyName);
+	      return readConfiguration().get(propertyName);
 	    }
 	  }
 

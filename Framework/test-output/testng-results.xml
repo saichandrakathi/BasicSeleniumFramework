@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2019-02-24T13:42:58Z" name="Default suite" finished-at="2019-02-24T13:43:48Z" duration-ms="49898">
+  <suite started-at="2019-02-25T10:47:43Z" name="Default suite" finished-at="2019-02-25T10:48:30Z" duration-ms="47013">
     <groups>
     </groups>
-    <test started-at="2019-02-24T13:42:58Z" name="Default test" finished-at="2019-02-24T13:43:48Z" duration-ms="49898">
+    <test started-at="2019-02-25T10:47:43Z" name="Default test" finished-at="2019-02-25T10:48:30Z" duration-ms="47013">
       <class name="com.app.webdriver.testcases.cmp.Test1">
-        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-24T13:42:58Z" name="beforeSuite" finished-at="2019-02-24T13:42:58Z" duration-ms="21" status="PASS">
+        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-25T10:47:43Z" name="beforeSuite" finished-at="2019-02-25T10:47:43Z" duration-ms="17" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeSuite -->
-        <test-method is-config="true" signature="initTestContext(java.lang.reflect.Method)[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-24T13:42:58Z" name="initTestContext" finished-at="2019-02-24T13:43:10Z" duration-ms="11983" status="PASS">
+        <test-method is-config="true" signature="initTestContext(java.lang.reflect.Method)[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-25T10:47:43Z" name="initTestContext" finished-at="2019-02-25T10:47:54Z" duration-ms="10778" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -22,15 +22,15 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initTestContext -->
-        <test-method signature="login()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-24T13:43:10Z" name="login" finished-at="2019-02-24T13:43:47Z" duration-ms="37534" status="PASS">
+        <test-method signature="login()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-25T10:47:54Z" name="login" finished-at="2019-02-25T10:48:30Z" duration-ms="35875" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- login -->
-        <test-method is-config="true" signature="stop()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-24T13:43:47Z" name="stop" finished-at="2019-02-24T13:43:48Z" duration-ms="112" status="PASS">
+        <test-method is-config="true" signature="stop()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-25T10:48:30Z" name="stop" finished-at="2019-02-25T10:48:30Z" duration-ms="109" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- stop -->
-        <test-method is-config="true" signature="stop()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-24T13:43:48Z" name="stop" finished-at="2019-02-24T13:43:48Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="stop()[pri:0, instance:com.app.webdriver.testcases.cmp.Test1@87a85e1]" started-at="2019-02-25T10:48:30Z" name="stop" finished-at="2019-02-25T10:48:30Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- stop -->

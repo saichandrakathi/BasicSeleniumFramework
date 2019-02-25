@@ -43,11 +43,11 @@ public class TestTemplate {
 
 	@BeforeMethod(alwaysRun = true)
 	public void initTestContext(Method method) {
+		
 		TestContext.writeMethodName(method);
 		Log.startTest(method);
 
 		Configuration.clearCustomTestProperties();
-
 		String browser = Configuration.getBrowser();
 		setPropertiesFromAnnotationsOnDeclaringClass(method.getDeclaringClass());
 		setPropertiesFromAnnotationsOnMethod(method);

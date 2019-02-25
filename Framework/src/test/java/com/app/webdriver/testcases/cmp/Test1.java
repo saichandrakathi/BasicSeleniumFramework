@@ -13,5 +13,7 @@ public class Test1 extends TestTemplate{
 		LoginPage login = new LoginPage();
 		login.login("hcm_user2", "Welcome1");
 	}
+	
+	
 
 }
