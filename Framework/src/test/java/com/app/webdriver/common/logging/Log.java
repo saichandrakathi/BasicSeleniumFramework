@@ -220,15 +220,13 @@ public class Log {
 	    return LOGS_RESULTS;
 	  }
 
-	  public static void startTest(Method testMethod) {
-	    String testName = testMethod.getName();
-	    String className = testMethod.getDeclaringClass().getCanonicalName();
+	  public static void startTest(String testName) {
 	    String command;
 	    String description;
 	    
 	    command = "";
 	    description = testName;
-	    String html = VelocityWrapper.fillFirstLogRow(className, testName, command, description);
+	    String html = VelocityWrapper.fillFirstLogRow( testName, command, description);
 	    CommonUtils.appendTextToFile(LOG_PATH, html);
 	    testStarted = true;
 	  }

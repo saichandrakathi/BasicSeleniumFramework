@@ -16,15 +16,15 @@ public class LoginPage extends BasePageObject{
 	  private WebElement password;
 	  @FindBy(id = "btnActive")
 	  private WebElement btnLogin;
-	  @FindBy(xpath = "//*[text()='Navigator']")
-	  private WebElement btnnavigator;
+	  
 
 	  
-	  public void login(String UserName, String Password) {
+	  public void login(String UserName, String Password, String NavigatorLink) {
 		    fillInput(userName, UserName);
 		    fillInput(password, Password);
 		    waitAndClick(btnLogin);
 		    waitFor.until(ExpectedConditions.elementToBeClickable(btnnavigator));
 		    Log.log("INFO", "Logged in as user:"+UserName, true, driver);
+		    clickNavigatorItem(NavigatorLink);
 		  }
 }

@@ -126,16 +126,16 @@ if ("true".equals(Configuration.getLogEnabled())) {
 public void onTestSkipped(ITestResult result) {
 Method method = result.getMethod().getConstructorOrMethod().getMethod();
 if (!Log.isTestStarted()) {
-  Log.startTest(method);
+  Log.startTest(method.getName());
 }
 if (method.isAnnotationPresent(DontRun.class)) {
-  Log.ok("Test SKIPPED", result.getThrowable().getMessage());
+  Log.ok("Step SKIPPED", result.getThrowable().getMessage());
   result.setStatus(ITestResult.SUCCESS);
   onTestSuccess(result);
 } else {
   result.setStatus(ITestResult.FAILURE);
   if (result.getThrowable() == null) {
-    result.setThrowable(new SkipException("TEST SKIPPED"));
+    result.setThrowable(new SkipException("STEP SKIPPED"));
   }
   onTestFailure(result);
 }

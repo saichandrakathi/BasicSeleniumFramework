@@ -120,7 +120,7 @@ public class Configuration {
 	  }
 
 	  public static String getUrl() {
-		    return getProp("Unified_HomePage");
+		    return getProp("HomePage");
 		  }
 
 	  public static void setTestValue(String key, String value) {

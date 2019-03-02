@@ -11,7 +11,7 @@ public class Test1 extends TestTemplate{
 	@Test
 	public void login() {
 		LoginPage login = new LoginPage();
-		login.login("hcm_user2", "Welcome1");
+		login.login("hcm_user2", "Welcome1", "Compensation");
 	}
 	
 	

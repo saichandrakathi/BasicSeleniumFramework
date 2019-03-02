@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -27,8 +28,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.app.webdriver.common.core.APPWebDriver;
@@ -43,6 +46,7 @@ import com.app.webdriver.common.logging.Log;
 
 
 
+
 public class BasePageObject {
 	private static final int TIMEOUT_PAGE_REGISTRATION = 3;
 	private static final String
@@ -53,7 +57,38 @@ public class BasePageObject {
 	public Actions builder;
 	protected APPWebDriver driver = DriverProvider.getActiveDriver();
 	protected int timeOut = 15;
-
+	
+	@FindBy(xpath = "//*[@id='pt1:_UIScmil1u::icon']")
+	protected WebElement btnSettings;
+	@FindBy(xpath = "//*[text()='Sign Out']")
+	protected WebElement btnSignout;
+	@FindBy(xpath = "//*[@id='pt1:_UISmmLink::icon']")
+	protected WebElement btnnavigator;
+	
+	
+	protected void clickNavigatorItem(String strNavigatorItem) {
+		/*boolean linkFound=false;
+		waitAndClick(btnnavigator);
+	    waitFor.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='af_panelHeader_title-text-cell' and @title='Navigator']")));
+	    List <WebElement> NavigatorItems = driver.findElements(By.xpath("//a[@class='UnifiedNavigatorItem af_commandLink']"));
+	    for(WebElement element:NavigatorItems)
+	    {
+	    	if (element.getText().equalsIgnoreCase(strNavigatorItem)) {
+	    		linkFound=true;
+	    		element.click();
+	    		break;
+	    	}
+	    }*/
+	
+	    
+	    
+	}
+	
+	protected void selectOptionfromTasks() {
+		
+	}
+	
+	
 	protected JavascriptActions jsActions;
 
 	public BasePageObject() {

@@ -8,10 +8,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 
 import com.app.webdriver.common.core.APPWebDriver;
@@ -24,13 +27,15 @@ import com.app.webdriver.common.driverprovider.DriverProvider;
 import com.app.webdriver.common.logging.Log;
 import com.app.webdriver.common.testnglisteners.BrowserAndTestEventListener;
 import com.app.webdriver.common.testnglisteners.InvokeMethodAdapter;
+import com.app.webdriver.common.testnglisteners.TestAnnotationTransformerListener;
 
 
 @Listeners({BrowserAndTestEventListener.class,
-	InvokeMethodAdapter.class})
+	InvokeMethodAdapter.class,TestAnnotationTransformerListener.class})
 public class TestTemplate {
 
 	protected APPWebDriver driver;
+	
 
 	private void refreshDriver() {
 		driver = DriverProvider.getActiveDriver();
@@ -40,17 +45,12 @@ public class TestTemplate {
 	public void beforeSuite() {
 		prepareDirectories();
 	}
-
-	@BeforeMethod(alwaysRun = true)
-	public void initTestContext(Method method) {
-		
-		TestContext.writeMethodName(method);
-		Log.startTest(method);
-
-		Configuration.clearCustomTestProperties();
+   @BeforeTest(alwaysRun = true)
+	public void beforeTest(final ITestContext testcontext) {
+	   Configuration.clearCustomTestProperties();
 		String browser = Configuration.getBrowser();
-		setPropertiesFromAnnotationsOnDeclaringClass(method.getDeclaringClass());
-		setPropertiesFromAnnotationsOnMethod(method);
+		Log.startTest(testcontext.getName());
+
 		String currentBrowser = Configuration.getBrowser();
 
 		if (!browser.equals(currentBrowser)) {
@@ -66,6 +66,16 @@ public class TestTemplate {
 		setWindowSize();
 
 		loadFirstPage();
+	   
+   }
+	
+	@BeforeMethod(alwaysRun = true)
+	public void initTestContext(Method method) {
+		
+		TestContext.writeMethodName(method);
+				setPropertiesFromAnnotationsOnDeclaringClass(method.getDeclaringClass());
+		setPropertiesFromAnnotationsOnMethod(method);
+		
 	}
 
 	private void setTestProperty(String key, String value) {

@@ -159,15 +159,13 @@ public class VelocityWrapper {
 	    return builder.toString();
 	  }
 
-	  static String fillFirstLogRow(
-	      String className, String testName, String command, String description
+	  static String fillFirstLogRow( String testName, String command, String description
 	  ) {
 	    StringBuilder builder = new StringBuilder();
 
 	    Template t = velocityEngine.getTemplate(FIRST_LOG_ROW_TEMPLATE_PATH);
 	    VelocityContext context = new VelocityContext();
 
-	    context.put("className", className);
 	    context.put("testName", testName);
 	    context.put("command", command);
 	    context.put("description", description);

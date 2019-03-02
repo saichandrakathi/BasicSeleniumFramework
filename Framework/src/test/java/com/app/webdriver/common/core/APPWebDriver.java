@@ -11,7 +11,6 @@ public class APPWebDriver extends EventFiringWebDriver {
 
 	  public APPWebDriver(WebDriver webdriver) {
 	    super(webdriver);
-
 	    this.webDriver = webdriver;
 	  }
 

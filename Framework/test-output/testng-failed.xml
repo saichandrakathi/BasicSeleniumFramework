@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="3" parallel="methods" name="Failed suite [TestSuite]" guice-stage="DEVELOPMENT">
-  <test thread-count="3" parallel="methods" name="testGuru(failed)">
+<suite name="Failed suite [TestSuite]" guice-stage="DEVELOPMENT">
+  <listeners>
+    <listener class-name="com.app.webdriver.common.testnglisteners.BrowserAndTestEventListener"/>
+    <listener class-name="com.app.webdriver.common.testnglisteners.InvokeMethodAdapter"/>
+    <listener class-name="com.app.webdriver.common.testnglisteners.TestAnnotationTransformerListener"/>
+  </listeners>
+  <test thread-count="5" name="testGuru(failed)">
     <classes>
       <class name="com.app.webdriver.testcases.cmp.Test1">
         <methods>
           <include name="stop"/>
           <include name="initTestContext"/>
+          <include name="login"/>
           <include name="beforeSuite"/>
-          <include name="login2"/>
+          <include name="beforeTest"/>
         </methods>
       </class> <!-- com.app.webdriver.testcases.cmp.Test1 -->
     </classes>
