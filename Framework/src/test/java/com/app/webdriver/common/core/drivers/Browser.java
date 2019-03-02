@@ -5,7 +5,7 @@ import com.app.webdriver.common.core.drivers.browsers.ChromeBrowser;
 import com.app.webdriver.common.logging.Log;
 
 public enum Browser {
-	CHROME(ChromeBrowser.class, "CHROME");
+	CHROME(ChromeBrowser.class, "CHROME")  ;
 	
 	private Class<? extends BrowserAbstract> browserClass;
 	  private String name;
